@@ -1,0 +1,25 @@
+name: Flutter CI using Docker
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Build Flutter Web
+        run: |
+          docker run --rm -v "$PWD":/app -w /app ghcr.io/iarunsaragadam/flutter-web-builder:latest flutter build web
+
+      - name: Upload Web Build (Artifact)
+        uses: actions/upload-artifact@v3
+        with:
+          name: flutter-web
+          path: build/web
