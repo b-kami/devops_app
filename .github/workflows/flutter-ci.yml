@@ -1,4 +1,4 @@
-name: Flutter CI Build
+name: Flutter CI Build 
 
 on: [push, pull_request]
 
@@ -12,7 +12,7 @@ jobs:
 
       - name: Build APK with Docker
         run: |
-          docker run --rm -v "$PWD":/app -w /app cirrusci/flutter:stable flutter build apk
+          docker run --rm -v "$GITHUB_WORKSPACE":/app -w /app cirrusci/flutter:stable flutter build apk
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
