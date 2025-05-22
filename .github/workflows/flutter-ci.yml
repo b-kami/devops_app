@@ -1,4 +1,4 @@
-name: Flutter CI Build (Web + Android)
+name: Flutter CI Build
 
 on: [push, pull_request]
 
@@ -10,11 +10,21 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'  # Ensures Java compatibility
+          java-version: '11'
+
+      - name: Accept Android Licenses
+        run: |
+          mkdir -p ~/.android
+          echo "d56f5187479451eabf01fb78af6dfcb131a6481e" > ~/.android/licenses/android-sdk-license
+
       - name: Build APK with Docker
         run: |
-          docker run --rm -v "$PWD":/app -w /app cirrusci/flutter:stable flutter build apk
+          docker run --rm -v "$PWD":/app -w /app cirrusci/flutter:3.19.0 flutter build apk
 
-      # (Optional) Upload APK as an artifact
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
