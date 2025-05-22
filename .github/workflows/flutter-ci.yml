@@ -27,7 +27,7 @@ jobs:
           echo "24333f8a63b6825ea9c5514f83c2829b004d1fee" >> ~/.android/licenses/android-sdk-license
 
       - name: Pull Flutter Docker image
-        run: docker pull cirrusci/flutter:3.19.0
+        run: docker pull cirrusci/flutter:stable
 
       - name: Build APK
         run: |
@@ -35,7 +35,7 @@ jobs:
             -v "$PWD":/app \
             -w /app \
             -e ANDROID_SDK_ROOT=/opt/android-sdk-linux \
-            cirrusci/flutter:3.19.0 \
+            cirrusci/flutter:stable \
             bash -c "flutter pub get && flutter build apk --release"
 
       - name: Upload APK
