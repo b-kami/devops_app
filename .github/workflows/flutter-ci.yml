@@ -1,21 +1,25 @@
-name: Flutter CI Build 
+name: Flutter Android Build
 
-on: [push, pull_request]
+on: [push]
 
 jobs:
-  build-android:
+  build:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      # 1. Checkout your code
+      - uses: actions/checkout@v3
 
-      - name: Build APK with Docker
+      # 2. Build using Docker
+      - name: Build APK
         run: |
-          docker run --rm -v "$GITHUB_WORKSPACE":/app -w /app cirrusci/flutter:stable flutter build apk
+          docker run --rm \
+            -v "$PWD":/app \
+            -w /app \
+            b4rc0/flutter-android:3.19.0 \
+            flutter build apk --release
 
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
+      # 3. Save the APK
+      - uses: actions/upload-artifact@v3
         with:
           name: app-release.apk
           path: build/app/outputs/flutter-apk/app-release.apk
