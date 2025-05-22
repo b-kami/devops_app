@@ -1,25 +1,42 @@
-name: Flutter Android Build
+name: Flutter Android CI Pipeline
 
-on: [push]
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
-  build:
+  build-android:
     runs-on: ubuntu-latest
+    
     steps:
-      # 1. Checkout your code
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-      # 2. Build using Docker
-      - name: Build APK
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: '11'
+
+      - name: Accept Android licenses
+        run: |
+          mkdir -p ~/.android
+          echo "d56f5187479451eabf01fb78af6dfcb131a6481e" > ~/.android/licenses/android-sdk-license
+
+      - name: Build APK with Docker
         run: |
           docker run --rm \
             -v "$PWD":/app \
             -w /app \
-            b4rc0/flutter-android:3.19.0 \
-            flutter build apk --release
+            -e ANDROID_SDK_ROOT=/opt/android-sdk-linux \
+            cirrusci/flutter:3.19.0 \
+            bash -c "flutter pub get && flutter build apk --release"
 
-      # 3. Save the APK
-      - uses: actions/upload-artifact@v4
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v3
         with:
           name: app-release.apk
           path: build/app/outputs/flutter-apk/app-release.apk
+          retention-days: 5
