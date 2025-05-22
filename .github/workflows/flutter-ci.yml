@@ -1,4 +1,4 @@
-name: Flutter CI Build (Web + Android)
+name: Flutter CI Build
 
 on: [push, pull_request]
 
@@ -14,7 +14,6 @@ jobs:
         run: |
           docker run --rm -v "$PWD":/app -w /app cirrusci/flutter:stable flutter build apk
 
-      # (Optional) Upload APK as an artifact
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
