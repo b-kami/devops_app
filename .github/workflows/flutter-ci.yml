@@ -33,7 +33,7 @@ jobs:
             -v "$PWD":/app \
             -w /app \
             -e ANDROID_SDK_ROOT=/opt/android-sdk-linux \
-            cirrusci/flutter:stable \
+            cirrusci/flutter:3.13.0 \
             bash -c "flutter pub get && flutter build apk --release"
 
       - name: Upload APK artifact
