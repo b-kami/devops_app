@@ -1,22 +1,15 @@
-name: Flutter CI Build (Web + Android)
+name: Flutter Web Build
 
 on: [push, pull_request]
 
 jobs:
-  build-android:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Build APK with Docker
+      - name: Build Flutter Web with Docker
         run: |
-          docker run --rm -v "$PWD":/app -w /app ghcr.io/iarunsaragadam/flutter-android-builder:latest flutter build apk
-
-      # (Optional) Upload artifacts so you can download the APK from GitHub
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: app-release.apk
-          path: build/app/outputs/flutter-apk/app-release.apk
+          docker run --rm -v "$PWD":/app -w /app ghcr.io/iarunsaragadam/flutter-web-builder:latest flutter build web
