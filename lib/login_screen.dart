@@ -25,7 +25,7 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FlutterLogin(
-      title: 'My App',
+      title: 'gestion des abs',
       onLogin: _authUser,
       onSignup: _signupUser,
       onRecoverPassword: _recoverPassword,
