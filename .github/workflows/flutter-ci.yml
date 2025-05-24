@@ -2,7 +2,9 @@ name: Flutter CI - Android Build
 
 on:
   push:
-  pull_request:
+    tags:           # Trigger only when a tag is pushed (e.g., v1.0.0)
+      - 'v*'
+  pull_request:     # Still allow running on PRs for normal builds
 
 jobs:
   build-android:
@@ -20,8 +22,18 @@ jobs:
             ghcr.io/cirruslabs/flutter:latest \
             flutter build apk
 
-      - name: Upload APK artifact
+      - name: Upload APK artifact (for CI usage)
         uses: actions/upload-artifact@v4
         with:
           name: app-release.apk
           path: build/app/outputs/flutter-apk/app-release.apk
+
+      - name: Create GitHub Release and Upload APK
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: Release ${{ github.ref_name }}
+          files: build/app/outputs/flutter-apk/app-release.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
