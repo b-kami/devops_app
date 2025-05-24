@@ -5,7 +5,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Home Page')),
-      body: Center(child: Text('Welcome back!! You are logged in.')),
+      body: Center(child: Text('by: SAOUDI & KHATIB')),
     );
   }
 }
